@@ -10,9 +10,11 @@ Vagrant.configure('2') do |config|
     # use a gui
     d.vm.provider :virtualbox do |vb|
        vb.gui = true
+       vb.customize ['modifyvm', :id, '--memory', 1024]
     end
     d.vm.provider :libvirt do |libvirt|
        libvirt.graphics_type = 'vnc'
+       libvirt.memory = 1024
     end
     d.ssh.forward_x11 = true
 
