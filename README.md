@@ -22,6 +22,14 @@ Connect using your favorite libvirt client such as `libvirt-manager` or connect 
 #### X-11 Forwarding
 If you have local X11 support, `vagrant ssh` and start firefox. You will need to start a new profile (i.e. `firefox -P tunneled`) or kill the automatically running firefox (`pkill firefox`).
 
+#### CLI
+The Dell repos are configured and the iDRAC client installed. Use it to connect:
+
+```
+vagrant ssh
+racadm -r $drac_ip -u $user -p $password getsysinfo
+```
+
 ## Why Is This Needed?
 The Java based iDRAC client does not run with a modern Java due to security policy changes. It also has to run 32bit.
 
