@@ -37,9 +37,9 @@ Vagrant.configure('2') do |config|
     # configure system for use with the java idrac client
     d.vm.provision 'shell', inline: <<-SHELL
        dnf -y --setopt=deltarpm=false install wget
-       wget -q -O - http://linux.dell.com/repo/hardware/dsu/bootstrap.cgi | bash
+       wget -q -O - https://linux.dell.com/repo/hardware/dsu/bootstrap.cgi | bash
        sed 's@f$releasever@el7@' /etc/yum.repos.d/dell-system-update.repo| sed 's@dell-system-update_@dsu-dell-system-update_@' > /etc/yum.repos.d/dell-system-update-dsu.repo
-       wget -q -O - http://linux.dell.com/repo/hardware/latest/bootstrap.cgi | bash
+       wget -q -O - https://linux.dell.com/repo/hardware/latest/bootstrap.cgi | bash
        sed -i 's@f$releasever@el6@' /etc/yum.repos.d/dell-system-update.repo
        dnf -y --best --setopt=deltarpm=false install @lxde-desktop-environment firefox java-\*-openjdk.i\*86 icedtea-web srvadmin-idrac
        ln -s /usr/lib64/libssl.so.10 /usr/lib64/libssl.so
@@ -49,7 +49,7 @@ Vagrant.configure('2') do |config|
        sed -i '/jdk.tls.disabledAlgorithms/ s@^#*@#@' $(rpm -qa java\*|grep i686|xargs rpm -ql|grep jre/lib/security/java.security)
        sed -i 's@# autologin=.*@autologin=vagrant@' /etc/lxdm/lxdm.conf
        mkdir -p /home/vagrant/.config/{autostart,clipit}
-       echo -e '[Desktop Entry]\nType=Application\nExec=firefox http://linux.dell.com/repo/hardware/dsu/' > /home/vagrant/.config/autostart/firefox.desktop
+       echo -e '[Desktop Entry]\nType=Application\nExec=firefox https://linux.dell.com/repo/hardware/dsu/' > /home/vagrant/.config/autostart/firefox.desktop
        echo -e '[rc]' > /home/vagrant/.config/clipit/clipitrc
        chown -R vagrant /home/vagrant/.config
        systemctl set-default runlevel5.target
