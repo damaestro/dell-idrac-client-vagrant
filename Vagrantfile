@@ -36,7 +36,7 @@ Vagrant.configure('2') do |config|
 
     # configure system for use with the java idrac client and install racadm tools
     d.vm.provision 'shell', inline: <<-SHELL
-       dnf -y --setopt=deltarpm=false install wget perl
+       dnf -y --setopt=deltarpm=false install wget perl virt-manager
        wget -q -O - https://linux.dell.com/repo/hardware/dsu/bootstrap.cgi | bash
        sed 's@f$releasever@el7@' /etc/yum.repos.d/dell-system-update.repo| sed 's@dell-system-update_@dsu-dell-system-update_@' > /etc/yum.repos.d/dell-system-update-dsu.repo
        wget -q -O - https://linux.dell.com/repo/hardware/latest/bootstrap.cgi | bash
