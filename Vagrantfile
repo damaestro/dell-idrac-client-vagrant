@@ -45,8 +45,7 @@ Vagrant.configure('2') do |config|
        ln -fs /usr/lib64/libssl.so.10 /usr/lib64/libssl.so
        sed -i 's@:/opt/dell/srvadmin/bin@:/opt/dell/srvadmin/bin:/opt/dell/srvadmin/sbin@' /etc/profile.d/srvadmin-path.sh
        sed -i 's@JAVA=.*@'"JAVA=$(rpm -qa java\*|grep i686|xargs rpm -ql|grep jre/bin/java)"'@' /usr/bin/javaws.itweb
-       sed -i '/jdk.certpath.disabledAlgorithms/ s@^#*@#@' $(rpm -qa java\*|grep i686|xargs rpm -ql|grep jre/lib/security/java.security)
-       sed -i '/jdk.tls.disabledAlgorithms/ s@^#*@#@' $(rpm -qa java\*|grep i686|xargs rpm -ql|grep jre/lib/security/java.security)
+       rm -vf $(rpm -qa java\*|grep i686|xargs rpm -ql|grep jre/lib/security/java.security)
        sed -i 's@# autologin=.*@autologin=vagrant@' /etc/lxdm/lxdm.conf
        mkdir -p /home/vagrant/.config/{autostart,clipit}
        echo -e '[Desktop Entry]\nType=Application\nExec=firefox https://linux.dell.com/repo/hardware/dsu/' > /home/vagrant/.config/autostart/firefox.desktop
