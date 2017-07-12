@@ -41,7 +41,8 @@ Vagrant.configure('2') do |config|
        sed 's@f$releasever@el7@' /etc/yum.repos.d/dell-system-update.repo| sed 's@dell-system-update_@dsu-dell-system-update_@' > /etc/yum.repos.d/dell-system-update-dsu.repo
        wget -q -O - https://linux.dell.com/repo/hardware/latest/bootstrap.cgi | bash
        sed -i 's@f$releasever@el6@' /etc/yum.repos.d/dell-system-update.repo
-       dnf -y --best --setopt=deltarpm=false install @lxde-desktop-environment firefox java-\*-openjdk.i\*86 icedtea-web srvadmin-idrac
+       dnf -y --setopt=deltarpm=false install @lxde-desktop-environment firefox java-\*-openjdk.i\*86 icedtea-web srvadmin-idrac
+       dnf -y --allowerasing downgrade firefox
        ln -fs /usr/lib64/libssl.so.10 /usr/lib64/libssl.so
        sed -i 's@:/opt/dell/srvadmin/bin@:/opt/dell/srvadmin/bin:/opt/dell/srvadmin/sbin@' /etc/profile.d/srvadmin-path.sh
        sed -i 's@JAVA=.*@'"JAVA=$(rpm -qa java\*|grep i686|xargs rpm -ql|grep jre/bin/java)"'@' /usr/bin/javaws.itweb
