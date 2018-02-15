@@ -34,3 +34,6 @@ racadm -r $drac_ip -u $user -p $password getsysinfo
 The Java based iDRAC client does not run with a modern Java due to security policy changes. It also has to run 32bit.
 
 This environment is a safe way to run a security relaxed 32bit java without damaging your host system's security.
+
+## Updates
+Sometimes upstream updates, when applied, could cause things to break. Try a `vagrant provision` and if that does not work please file an issue.
