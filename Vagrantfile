@@ -46,7 +46,7 @@ Vagrant.configure('2') do |config|
        wget -q -O - https://linux.dell.com/repo/hardware/latest/bootstrap.cgi | bash
        sed -i 's@f$releasever@el6@' /etc/yum.repos.d/dell-system-update.repo
        dnf -y --setopt=deltarpm=false install @lxde-desktop-environment firefox onboard java-\*-openjdk.i\*86 srvadmin-idrac
-       dnf -y --setopt=deltarpm=false install https://jsteffan.fedorapeople.org/RPMS/icedtea-web-1.7-0.4.pre06.fc27.x86_64.rpm
+       dnf -y --setopt=deltarpm=false install https://jsteffan.fedorapeople.org/drac_rpms/icedtea-web-1.7-0.4.pre06.fc27.x86_64.rpm https://jsteffan.fedorapeople.org/drac_rpms/firefox-49.0.2-1.fc27.x86_64.rpm
        grep -q 'excludepkgs=icedtea-web' /etc/dnf/dnf.conf 2>&1 || echo 'excludepkgs=icedtea-web' >> /etc/dnf/dnf.conf
        ln -fs /usr/lib64/libssl.so.10 /usr/lib64/libssl.so
        sed -i 's@:/opt/dell/srvadmin/bin@:/opt/dell/srvadmin/bin:/opt/dell/srvadmin/sbin@' /etc/profile.d/srvadmin-path.sh
