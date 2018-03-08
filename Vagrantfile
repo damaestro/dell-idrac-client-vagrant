@@ -6,7 +6,6 @@ Vagrant.configure('2') do |config|
   config.vm.define :dell_idrac_client do |d|
     # base on fedora
     d.vm.box = 'fedora/27-cloud-base'
-    d.vm.box_url = 'https://download.fedoraproject.org/pub/fedora/linux/releases/27/CloudImages/x86_64/images/Fedora-Cloud-Base-Vagrant-27-1.6.x86_64.vagrant-virtualbox.box'
 
     # use a gui
     d.vm.provider :virtualbox do |vb|

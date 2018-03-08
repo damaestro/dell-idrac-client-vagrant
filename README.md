@@ -1,6 +1,10 @@
 # Dell iDRAC Client
 Vagrant box to start up a pre-configured Linux environment to connect to Dell iDRACs.
 
+## Requirements
+
+* Vagrant >= 2.x
+
 ## Getting Started
 Clone the repo and vagrant up:
 
