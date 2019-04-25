@@ -5,16 +5,16 @@
 Vagrant.configure('2') do |config|
   config.vm.define :dell_idrac_client do |d|
     # base on fedora
-    d.vm.box = 'fedora/27-cloud-base'
+    d.vm.box = 'fedora/29-cloud-base'
 
     # use a gui
     d.vm.provider :virtualbox do |vb|
        vb.gui = true
-       vb.customize ['modifyvm', :id, '--memory', 1024]
+       vb.customize ['modifyvm', :id, '--memory', 2048]
     end
     d.vm.provider :libvirt do |libvirt|
        libvirt.graphics_type = 'vnc'
-       libvirt.memory = 1024
+       libvirt.memory = 2048
     end
     d.ssh.forward_x11 = true
 
@@ -43,12 +43,9 @@ Vagrant.configure('2') do |config|
        wget -q -O - https://linux.dell.com/repo/hardware/dsu/bootstrap.cgi | bash
        sed 's@f$releasever@el7@' /etc/yum.repos.d/dell-system-update.repo| sed 's@dell-system-update_@dsu-dell-system-update_@' > /etc/yum.repos.d/dell-system-update-dsu.repo
        wget -q -O - https://linux.dell.com/repo/hardware/latest/bootstrap.cgi | bash
-       sed -i 's@f$releasever@el6@' /etc/yum.repos.d/dell-system-update.repo
+       sed -i 's@f$releasever@el7@' /etc/yum.repos.d/dell-system-update.repo
        dnf -y --setopt=deltarpm=false install @lxde-desktop-environment onboard srvadmin-idrac
-       grep -q 'excludepkgs=icedtea-web' /etc/dnf/dnf.conf 2>&1 || echo 'excludepkgs=icedtea-web' >> /etc/dnf/dnf.conf
-       rpm -q firefox|grep firefox-49.0.2 || dnf -y --setopt=deltarpm=false install https://jsteffan.fedorapeople.org/drac_rpms/firefox-49.0.2-1.fc27.x86_64.rpm
-       rpm -q java-1.8.0-openjdk-headless || dnf -y --setopt=deltarpm=false install https://jsteffan.fedorapeople.org/drac_rpms/java-1.8.0-openjdk-1.8.0.161-5.b14.fc27.i686.rpm https://jsteffan.fedorapeople.org/drac_rpms/java-1.8.0-openjdk-headless-1.8.0.161-5.b14.fc27.i686.rpm
-       rpm -q icedtea-web || dnf -y --setopt=deltarpm=false install rhino tagsoup GConf2 && rpm -Uvh https://jsteffan.fedorapeople.org/drac_rpms/icedtea-web-1.7-0.4.pre06.fc27.x86_64.rpm
+       dnf -y --setopt=deltarpm=false install firefox icedtea-web java-1.8.0-openjdk.i686 java-1.8.0-openjdk-headless.i686
        ln -fs /usr/lib64/libssl.so.10 /usr/lib64/libssl.so
        sed -i 's@:/opt/dell/srvadmin/bin@:/opt/dell/srvadmin/bin:/opt/dell/srvadmin/sbin@' /etc/profile.d/srvadmin-path.sh
        sed -i 's@JAVA=.*@'"JAVA=$(rpm -qa java\*|grep i686|xargs rpm -ql|grep bin/java)"'@' /usr/bin/javaws.itweb

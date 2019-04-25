@@ -3,15 +3,26 @@ Vagrant box to start up a pre-configured Linux environment to connect to Dell iD
 
 ## Requirements
 
-* Vagrant >= 2.x
+* [Vagrant](https://www.vagrantup.com/) >= 2.x
 
 ## Getting Started
 Clone the repo and vagrant up:
 
-```
+```console
 git clone https://github.com/damaestro/dell-idrac-client-vagrant.git
 cd dell-idrac-client-vagrant
 vagrant up
+```
+
+### Using Specific Virt Technology
+To start the environment in a specific virt technology when muliple are available, use the `--provider` flag:
+
+```console
+vagrant up --provider virtualbox
+```
+
+```console
+vagrant up --provider libvirt
 ```
 
 ### Connecting to an iDRAC
