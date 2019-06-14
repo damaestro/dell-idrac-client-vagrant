@@ -5,7 +5,7 @@
 Vagrant.configure('2') do |config|
   config.vm.define :dell_idrac_client do |d|
     # base on fedora
-    d.vm.box = 'fedora/29-cloud-base'
+    d.vm.box = 'fedora/30-cloud-base'
 
     # use a gui
     d.vm.provider :virtualbox do |vb|
@@ -37,14 +37,9 @@ Vagrant.configure('2') do |config|
     # disable default synced folder
     d.vm.synced_folder ".", "/vagrant", disabled: true
 
-    # configure system for use with the java idrac client and install racadm tools
+    # configure system for use with the java idrac client
     d.vm.provision 'shell', inline: <<-SHELL
-       dnf -y --setopt=deltarpm=false install wget perl virt-manager
-       wget -q -O - https://linux.dell.com/repo/hardware/dsu/bootstrap.cgi | bash
-       sed 's@f$releasever@el7@' /etc/yum.repos.d/dell-system-update.repo| sed 's@dell-system-update_@dsu-dell-system-update_@' > /etc/yum.repos.d/dell-system-update-dsu.repo
-       wget -q -O - https://linux.dell.com/repo/hardware/latest/bootstrap.cgi | bash
-       sed -i 's@f$releasever@el7@' /etc/yum.repos.d/dell-system-update.repo
-       dnf -y --setopt=deltarpm=false install @lxde-desktop-environment onboard
+       dnf -y --setopt=deltarpm=false install @lxde-desktop-environment onboard virt-manager
        dnf -y --setopt=deltarpm=false install firefox icedtea-web java-1.8.0-openjdk.i686 java-1.8.0-openjdk-headless.i686
        ln -fs /usr/lib64/libssl.so.10 /usr/lib64/libssl.so
        sed -i 's@JAVA=.*@'"JAVA=$(rpm -qa java\*|grep i686|xargs rpm -ql|grep bin/java)"'@' /usr/bin/javaws.itweb
