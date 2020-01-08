@@ -39,7 +39,7 @@ Vagrant.configure('2') do |config|
 
     # configure system for use with the java idrac client
     d.vm.provision 'shell', inline: <<-SHELL
-       dnf -y --setopt=deltarpm=false install @lxde-desktop-environment onboard virt-manager
+       dnf -y --setopt=deltarpm=false install --exclude nfs-utils @lxde-desktop-environment onboard virt-manager
        dnf -y --setopt=deltarpm=false install firefox icedtea-web java-1.8.0-openjdk.i686 java-1.8.0-openjdk-headless.i686
        ln -fs /usr/lib64/libssl.so.10 /usr/lib64/libssl.so
        sed -i 's@JAVA=.*@'"JAVA=$(rpm -qa java\*|grep i686|xargs rpm -ql|grep bin/java)"'@' /usr/bin/javaws.itweb
