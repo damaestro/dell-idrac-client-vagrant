@@ -13,11 +13,22 @@ Vagrant.configure('2') do |config|
 
     # Skeleton VMware support
     d.vm.provider :vmware_fusion or b.vm.provider :vmware_workstation do |vmware, override|
-      #override.vm.box = "" # TODO: Find or make a box
+      override.vm.box = "generic/fedora30" # TODO: Find or make a box
       vmware.gui = true
       vmware.vmx["memsize"] = ramMB
-      vmware.vmx["numvcpus" = vCpus
+      vmware.vmx["numvcpus"] = vCpus
     end
+
+    # Skeleton Hyper-V support
+    # Will need to connect to GUI using hyper-v manager
+    d.vm.provider :hyperv do |hyperv, override|
+      override.vm.box = "generic/fedora30" 
+      hyperv.maxmemory = ramMB
+      hyperv.cpus = vCpus
+      hyperv.linked_clone = true
+
+    end
+    
     # use a gui
     d.vm.provider :virtualbox do |vb|
        vb.gui = true
