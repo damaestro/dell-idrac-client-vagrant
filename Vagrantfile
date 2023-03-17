@@ -1,37 +1,56 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# VM specs
+vCpus = 2
+ramMB = 4096
+
 # Launch a Fedora minimal desktop pre-configured to connect into Dell iDRACs
 Vagrant.configure('2') do |config|
   config.vm.define :dell_idrac_client do |d|
     # base on fedora
     d.vm.box = 'fedora/36-cloud-base'
 
+    # Skeleton VMware support
+    d.vm.provider :vmware_fusion or d.vm.provider :vmware_workstation do |vmware, override|
+      override.vm.box = "generic/fedora30" # TODO: Find or make a box
+      vmware.gui = true
+      vmware.vmx["memsize"] = ramMB
+      vmware.vmx["numvcpus"] = vCpus
+    end
+
+    # Skeleton Hyper-V support
+    # Will need to connect to GUI using hyper-v manager
+    d.vm.provider :hyperv do |hyperv, override|
+      override.vm.box = "generic/fedora30" 
+      hyperv.maxmemory = ramMB
+      hyperv.cpus = vCpus
+      hyperv.linked_clone = true
+      hyperv.vm_integration_services = {
+        guest_service_interface: true,
+        heartbeat: true,
+        shutdown: true,
+        time_synchronization: true
+      }
+    end
+    
     # use a gui
     d.vm.provider :virtualbox do |vb|
-       vb.gui = true
-       vb.customize ['modifyvm', :id, '--memory', 2048]
+      vb.gui = true
+      vb.customize ['modifyvm', :id, '--memory', ramMB]
     end
     d.vm.provider :libvirt do |libvirt|
-       libvirt.graphics_type = 'vnc'
-       libvirt.memory = 2048
+      libvirt.graphics_type = 'vnc'
+      libvirt.memory = ramMB
     end
     d.ssh.forward_x11 = true
 
     # use all available cpu cores
-    host = RbConfig::CONFIG['host_os']
-    if host =~ /darwin/
-      cpus = `sysctl -n hw.ncpu`.to_i
-    elsif host =~ /linux/
-      cpus = `nproc`.to_i
-    else
-      cpus = 1
-    end
     d.vm.provider :virtualbox do |vb|
-      vb.customize ['modifyvm', :id, '--cpus', cpus]
+      vb.customize ['modifyvm', :id, '--cpus', vCpus]
     end
     d.vm.provider :libvirt do |libvirt|
-      libvirt.cpus = cpus
+      libvirt.cpus = vCpus
     end
 
     # disable default synced folder
