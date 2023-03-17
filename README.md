@@ -1,3 +1,7 @@
+# FIXME
+
+This repo was created to enable connecting to legacy iDRACs without having unsafe software on your main system.
+
 # Dell iDRAC Client
 Vagrant box to start up a pre-configured Linux environment to connect to Dell iDRACs.
 
