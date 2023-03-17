@@ -5,7 +5,7 @@
 Vagrant.configure('2') do |config|
   config.vm.define :dell_idrac_client do |d|
     # base on fedora
-    d.vm.box = 'fedora/30-cloud-base'
+    d.vm.box = 'fedora/36-cloud-base'
 
     # use a gui
     d.vm.provider :virtualbox do |vb|
@@ -39,14 +39,13 @@ Vagrant.configure('2') do |config|
 
     # configure system for use with the java idrac client
     d.vm.provision 'shell', inline: <<-SHELL
-       dnf -y --setopt=deltarpm=false install --exclude nfs-utils @lxde-desktop-environment onboard virt-manager
-       dnf -y --setopt=deltarpm=false install firefox icedtea-web java-1.8.0-openjdk.i686 java-1.8.0-openjdk-headless.i686
-       ln -fs /usr/lib64/libssl.so.10 /usr/lib64/libssl.so
-       sed -i 's@JAVA=.*@'"JAVA=$(rpm -qa java\*|grep i686|xargs rpm -ql|grep bin/java)"'@' /usr/bin/javaws.itweb
+       dnf -y install @lxde-desktop-environment onboard virt-manager firefox https://kojipkgs.fedoraproject.org//packages/icedtea-web/2.0.0/pre.0.3.alpha16.patched1.1.fc36.2/x86_64/icedtea-web-2.0.0-pre.0.3.alpha16.patched1.1.fc36.2.x86_64.rpm
+       dnf -y install https://kojipkgs.fedoraproject.org/packages/java-1.8.0-openjdk/1.8.0.362.b09/1.fc36/i686/java-1.8.0-openjdk-1.8.0.362.b09-1.fc36.i686.rpm https://kojipkgs.fedoraproject.org/packages/java-1.8.0-openjdk/1.8.0.362.b09/1.fc36/i686/java-1.8.0-openjdk-headless-1.8.0.362.b09-1.fc36.i686.rpm
+       sed -i 's@JAVA=.*@'"JAVA=$(rpm -qa java\*|grep i686|xargs rpm -ql|grep bin/java)"'@' /usr/bin/javaws
        rm -vf $(rpm -qa java\*|grep i686|xargs rpm -ql|grep security/java.security)
        sed -i 's@# autologin=.*@autologin=vagrant@' /etc/lxdm/lxdm.conf
        mkdir -p /home/vagrant/.config/{autostart,clipit}
-       echo -e '[Desktop Entry]\nType=Application\nExec=firefox https://linux.dell.com/repo/hardware/dsu/' > /home/vagrant/.config/autostart/firefox.desktop
+       echo -e '[Desktop Entry]\nType=Application\nExec=firefox https://www.java.com/en/download/help/testvm.xml' > /home/vagrant/.config/autostart/firefox.desktop
        echo -e '[Desktop Entry]\nType=Application\nExec=onboard' > /home/vagrant/.config/autostart/onboard.desktop
        echo -e '[rc]' > /home/vagrant/.config/clipit/clipitrc
        echo -e 'lock: False\nmode: blank\ntimeout: 0:10:00' > /home/vagrant/.xscreensaver
